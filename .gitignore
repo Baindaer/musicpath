@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/dataSources/
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/musicpath.iml
+.idea/workspace.xml
+db.sqlite3
+musicpath/__pycache__/
