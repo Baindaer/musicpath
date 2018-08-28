@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="{% static 'journalpath/images/dev-icon.png' %}">
+    <title>
+      {% block page_tittle %}
+      {% endblock %}
+    </title>
+
+    <!-- Bootstrap -->
+    <link type="text/css" href="{% static 'journalpath/css/bootstrap.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'journalpath/css/style.css' %}" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+
+
+
+
+    {% block head %}
+    {% endblock %}
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #00262f">
+      <a class="navbar-brand" href="{% url 'index' %}">♫usicPath</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          {% if active  == "sessions" %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'session_list' %}" style="background-color: #092f3a; color: #ece4cf">
+                Sessions
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'session_list' %}" style="color: #78898b">
+                Sessions
+              </a>
+            </li>
+          {% endif %}
+          {% if active  == "catalog" %}
+            <li class="nav-item active" >
+              <a class="nav-link" href="{% url 'catalog_list' %}" style="background-color: #092f3a; color: #ece4cf">
+                Catalog
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'catalog_list' %}" style="color: #78898b">
+                Catalog
+              </a>
+            </li>
+          {% endif %}
+
+        </ul>
+      <span class="navbar-text">
+
+        {% if not request.user.is_authenticated %}
+          <a href="{% url 'login' %}"><i class="fa fa-login" aria-hidden="true"></i> Login</a>
+        {% else %}
+           <a href="#" style="color: #ece4cf"><i class="fa fa-users" aria-hidden="true"></i>   {{ request.user.first_name }}</a>
+        {% endif %}
+
+      </span>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      {% block body %}
+      {% endblock %}
+
+    </div><!-- /.container -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+     <!--Import jQuery before export.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+
+     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'journalpath/js/bootstrap.js' %}"></script>
+    <script src="{% static 'journalpath/js/template.js' %}"></script>
+    {% block scripts %}
+    {% endblock %}
+    {% for m in messages %}
+      {% if m.level_tag == 'error' %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+      {% elif m.level_tag == 'success' %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+      {% else %}
+        </div>
+      {% endif %}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      {{ m.message }}
+      </div>
+    {% endfor %}
+  </body>
+</html>

@@ -25,12 +25,13 @@ SECRET_KEY = 'h!#axf_$l6(0a(f2ei83-9iidb=+jrmriefk7u*0=d!qr!ibqx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'journalpath.apps.JournalpathConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,10 +52,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'musicpath.urls'
 
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, '/journalpath/templates/journalpath')]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, '/journalpath/templates/journalpath')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

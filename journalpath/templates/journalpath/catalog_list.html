@@ -1,0 +1,111 @@
+{% extends "journalpath/template.html" %}
+{% load static %}
+
+{% block page_tittle %}
+  ♫usicPath Catalog
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+  <h2 style="color:#586e75">Catalog</h2>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Catalog</li>
+    </ol>
+    <div class="row">
+      <div class="col-6">
+        <a class="btn btn-primary" href="#">New</a>
+      </div>
+
+    </div>
+
+  </nav>
+  {% if catalog_data %}
+    <div class="table-responsive">
+      <table class="table table-hover" id="catalog_table"
+             data-toggle="table"
+             data-sortable="True"
+             data-search="True"
+             data-show-toggle="true"
+             data-show-columns="true">
+        <thead class="thead-dark">
+          <tr>
+            <th data-field="id">ID</th>
+            <th data-field="name" data-sortable="1">Name</th>
+            <th data-field="author" data-sortable="1">Author</th>
+            <th data-field="date" data-sortable="1">Date Added</th>
+            <th data-field="type" data-sortable="1">Type</th>
+            <th data-field="difficulty" data-sortable="1">Difficulty</th>
+            <th data-field="self_appraisal" data-sortable="1">Self Appraisal</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for c in catalog_data %}
+          <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.name }}</td>
+            <td>{{ c.author }}</td>
+            <td>{{ c.date }}</td>
+            <td>
+              {% if c.type == 'Repertory' %}
+                <i class="fa fa-music" aria-hidden="true"></i>
+              {% elif c.type == 'Technique'%}
+                <i class="fa fa-trophy" aria-hidden="true"></i>
+              {% elif c.type == 'Method'%}
+                <i class="fa fa-flask" aria-hidden="true"></i>
+              {% endif %}
+            </td>
+            <td>
+              {% if c.difficulty == 0 %}
+                <i class="fa fa-book" aria-hidden="true"></i>
+              {% else %}
+                  <kbd id="kbd_difficulty" data-difficulty={{ c.difficulty }}>{{ c.difficulty }}</kbd>
+
+              {% endif %}
+            </td>
+            <td>
+                <span class="stars" data-rating={{ c.self_appraisal }} data-num-stars="5"></span>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+    {% if catalog_data.has_other_pages %}
+      <ul class="pagination">
+      {% if catalog_data.has_previous %}
+        <li><a href="?page={{ catalog_data.previous_page_number }}">&laquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&laquo;</span></li>
+      {% endif %}
+      {% for i in catalog_data.paginator.page_range %}
+        {% if catalog_data.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+          <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if catalog_data.has_next %}
+        <li><a href="?page={{ catalog_data.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+      </ul>
+      {% endif %}
+  {% else %}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      Catalog not found for this user
+    </div>
+  {% endif %}
+{% endblock %}
+
+
+{% block scripts %}
+  <script src="{% static 'journalpath/js/catalog_list.js' %}"></script>
+{% endblock %}

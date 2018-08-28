@@ -1,0 +1,96 @@
+/*Solarized colors*/
+
+/*$base03:    #002b36;*/
+/*$base02:    #073642;*/
+/*$base01:    #586e75;*/
+/*$base00:    #657b83;*/
+/*$base0:     #839496;*/
+/*$base1:     #93a1a1;*/
+/*$base2:     #eee8d5;*/
+/*$base3:     #fdf6e3;*/
+/*$yellow:    #b58900;*/
+/*$orange:    #cb4b16;*/
+/*$red:       #dc322f;*/
+/*$magenta:   #d33682;*/
+/*$violet:    #6c71c4;*/
+/*$blue:      #268bd2;*/
+/*$cyan:      #2aa198;*/
+/*$green:     #859900;*/
+
+body {
+    padding-top: 80px;
+    background-color: #fdf4df;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+.breadcrumb {
+    background-color: #eee8d5;
+}
+
+.table .thead-dark th {
+  color: #93a1a1;
+  background-color: #002b36;
+  border-color: #002b36;
+}
+
+.table td {
+  color: #586e75;
+}
+
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #eee8d5;
+}
+
+.bronze-tag {
+    background-color: #cb4b16;
+}
+
+.silver-tag {
+    background-color: #839496;
+}
+
+.gold-tag {
+    background-color: #b58900;
+}
+
+.plat-tag {
+    background-color: #eee8d5;
+}
+
+.diamond-tag {
+    background-color: #268bd2;
+}
+
+
+
+
+.blue-tag {
+  background-color: #268bd2;
+}
+
+/* Checkbox */
+.form-group input[type="checkbox"] {
+    display: none;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span {
+    width: 20px;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span:first-child {
+    display: none;
+}
+.form-group input[type="checkbox"] + .btn-group > label span:last-child {
+    display: inline-block;
+}
+
+.form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+    display: inline-block;
+}
+.form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+    display: none;
+}
