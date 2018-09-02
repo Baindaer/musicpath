@@ -9,12 +9,103 @@
 {% endblock %}
 
 {% block body %}
-<p>
 
-    Sessions
-</p>
+  <h2 style="color:#586e75">Sessions</h2>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Sessions</li>
+    </ol>
+    <div class="row">
+      <div class="col-6">
+        <a class="btn btn-primary" href="/session_new">New</a>
+      </div>
+
+    </div>
+
+  </nav>
+  {% if session_data %}
+    <div class="table-responsive">
+      <table class="table table-hover" id="session_table"
+             data-toggle="table"
+             data-sortable="True"
+             data-search="True"
+             data-show-toggle="true"
+             data-show-columns="true">
+        <thead class="thead-dark">
+          <tr>
+            <th data-field="id">ID</th>
+            <th data-field="date">Date</th>
+            <th data-field="catalog">Work</th>
+            <th data-field="type">Type</th>
+            <th data-field="duration" data-sortable="1">Duration</th>
+            <th data-field="tempo_min">Tempo Min</th>
+            <th data-field="tempo_max">Tempo Max</th>
+            <th data-field="unit">Unit</th>
+            <th data-field="rate" data-sortable="1">Rate</th>
+            <th data-field="emoji" data-sortable="1">Emoji</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for c in session_data %}
+          <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.date }}</td>
+            <td>{{ c.catalog }}</td>
+            <td>
+              {% if c.type == 'Repertory' %}
+                <i class="fa fa-music" aria-hidden="true"></i>
+              {% elif c.type == 'Technique'%}
+                <i class="fa fa-trophy" aria-hidden="true"></i>
+              {% elif c.type == 'Method'%}
+                <i class="fa fa-flask" aria-hidden="true"></i>
+              {% endif %}
+            </td>
+            <td> <i class="fa fa-clock-o" aria-hidden="true"></i> {{ c.duration }}</td>
+          <td>{{ c.tempo_min }}</td>
+          <td>{{ c.tempo_max }}</td>
+          <td>{{ c.unit }}</td>
+            <td>
+                <span class="stars" data-rating={{ c.rate }} data-num-stars="5"></span>
+            </td>
+            <td>{{ c.emoji }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <br/><br/>
+
+    {% if catalog_data.has_other_pages %}
+      <ul class="pagination">
+      {% if catalog_data.has_previous %}
+        <li><a href="?page={{ catalog_data.previous_page_number }}">&laquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&laquo;</span></li>
+      {% endif %}
+      {% for i in catalog_data.paginator.page_range %}
+        {% if catalog_data.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+          <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if catalog_data.has_next %}
+        <li><a href="?page={{ catalog_data.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+      </ul>
+      {% endif %}
+  {% else %}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      Catalog not found for this user
+    </div>
+  {% endif %}
 
 {% endblock %}
 
 {% block scripts %}
+  <script src="{% static 'journalpath/js/session_list.js' %}"></script>
 {% endblock %}

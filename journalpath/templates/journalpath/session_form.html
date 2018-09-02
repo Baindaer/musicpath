@@ -1,0 +1,133 @@
+{% extends "journalpath/template.html" %}
+{% load static %}
+
+{% block page_tittle %}
+  ♫usicPath New Session
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+  {% if session_id != False %}
+    <form class="musicpath_form" action="{% url 'session_form' session_id.id %}" method="POST">
+      <h2>View session</h2>
+        {% csrf_token %}
+
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/session_list">Sessions</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Session details</li>
+      </ol>
+      <div class="row">
+        <div class="col-12">
+          <button type="submit" class="btn btn-danger" name="submit" value="delete_item" id="delete_item">Delete</button>
+          <button type="submit" class="btn btn-secondary" name="submit" value="cancel" id="cancel_edit">Cancel</button>
+        </div>
+      </div>
+    </nav>
+    {% else %}
+      <h2>Register new session</h2>
+      <form class="musicpath_form" action="{% url 'session_new' %}" method="POST">
+        {% csrf_token %}
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/session_list">Sessions</a></li>
+            <li class="breadcrumb-item active" aria-current="page">New session</li>
+          </ol>
+          <button type="submit" class="btn btn-primary" name="submit" value="submit_item" id="submit_item">Submit</button>
+          <button type="submit" class="btn btn-secondary" name="submit" value="cancel" id="cancel_new">Cancel</button>
+        </nav>
+    {% endif %}
+    <div class="container">
+      <div class="row">
+        <div class="form-group col-sm">
+          <label for="catalog">Work:</label>
+          <select id="catalog" name="catalog" class="form-control">
+            {% for a in catalogs %}
+              <option value="{{ a.id }}">{{ a.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-sm">
+          <label for="date">Date:</label>
+          <input type="date" class="form-control" name="date" id="date">
+        </div>
+
+        <div class="w-100"></div>
+        <div class="form-group col-sm">
+          <label for="tempo_min">Tempo Min:</label>
+          <input type="number" class="form-control" name="tempo_min" id="tempo_min">
+        </div>
+        <div class="form-group col-sm">
+          <label for="tempo_max">Tempo Max:</label>
+          <input type="number" class="form-control" name="tempo_max" id="tempo_max">
+        </div>
+        <div class="form-group col-sm">
+          <label for="unit">Unit:</label>
+          <input type="text" class="form-control" name="unit" id="unit">
+        </div>
+
+        <div class="w-100"></div>
+
+        <div class="form-group col-sm">
+          <label for="duration">Duration:</label>
+          <input type="number" class="form-control" name="duration" id="duration">
+        </div>
+        <div class="form-group col-sm">
+          <label for="rate">Rate:</label>
+          <input type="number" class="form-control" name="rate" id="rate">
+        </div>
+        <div class="form-group col-sm">
+          <label for="emoji">Emoji:</label>
+          <input type="text" data-emojiable="true" class="form-control" name="emoji" id="emoji">
+        </div>
+
+
+        <div class="w-100"></div>
+
+
+
+
+        <div class="form-group col-sm">
+          <label for="detail">Detail:</label>
+          <textarea rows="4" class="form-control" name="detail" id="detail"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+{% endblock %}
+
+{% block scripts %}
+  <script>
+  $('#date').val('{{ session_id.date|date:"Y-m-d" }}');
+  $('#catalog').val('{{ session_id.catalog.id }}');
+  $('#rate').val('{{ session_id.rate }}');
+  $('#emoji').val('{{ session_id.emoji }}');
+  $('#duration').val('{{ session_id.duration }}');
+  $('#tempo_min').val('{{ session_id.tempo_min }}');
+  $('#tempo_max').val('{{ session_id.tempo_max }}');
+  $('#unity').val('{{ session_id.unity }}');
+  $('#detail').val('{{ session_id.detail }}');
+
+  {% if session_id == False %}
+      let date = new Date();
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+      if (month < 10)
+        month = "0" + month;
+      if (day < 10)
+        day = "0" + day;
+      let today = year + "-" + month + "-" + day;
+      console.log("sds");
+      $("#date").val(today);
+    {% endif %}
+  </script>
+{% endblock %}

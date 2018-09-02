@@ -1,0 +1,121 @@
+{% extends "journalpath/template.html" %}
+{% load static %}
+
+{% block page_tittle %}
+  ♫usicPath Catalog
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+  {% if catalog_id != False %}
+    <form class="musicpath_form" action="{% url 'catalog_form' catalog_id.id %}" method="POST">
+      <h2>View catalog</h2>
+        {% csrf_token %}
+
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/catalog_list">Catalog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Item details</li>
+      </ol>
+      <div class="row">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary" name="submit" value="save_item" id="save_item">Save</button>
+          <button type="submit" class="btn btn-danger" name="submit" value="delete_item" id="delete_item">Delete</button>
+          <button type="submit" class="btn btn-secondary" name="submit" value="cancel" id="cancel_edit">Cancel</button>
+        </div>
+      </div>
+    </nav>
+    {% else %}
+      <h2>Register new piece</h2>
+      <form class="musicpath_form" action="{% url 'catalog_new' %}" method="POST">
+        {% csrf_token %}
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/catalog_list">Catalog</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Item details</li>
+          </ol>
+          <button type="submit" class="btn btn-primary" name="submit" value="submit_item" id="submit_item">Submit</button>
+          <button type="submit" class="btn btn-secondary" name="submit" value="cancel" id="cancel_new">Cancel</button>
+        </nav>
+    {% endif %}
+    <div class="container">
+      <div class="row">
+        <div class="form-group col-sm">
+          <label for="name">Name:</label>
+          <input type="text" class="form-control" name="name" id="name">
+        </div>
+        <div class="form-group col-sm">
+          <label for="author">Author:</label>
+          <select id="author" name="author" class="form-control">
+            {% for a in authors %}
+              <option value="{{ a.id }}">{{ a.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="w-100"></div>
+        <div class="form-group col-sm">
+          <label for="date">Date:</label>
+          <input type="date" class="form-control" name="date" id="date">
+        </div>
+        <div class="form-group col-sm">
+          <label for="difficulty">Difficulty:</label>
+          <input type="number" max=10 class="form-control" name="difficulty" id="difficulty">
+        </div>
+        <div class="form-group col-sm">
+          <label for="self_appraisal">Self Appraisal:</label>
+          <input type="number" max=5 class="form-control" name="self_appraisal" id="self_appraisal">
+        </div>
+        <div class="w-100"></div>
+        <div class="form-group col-sm">
+          <label for="type">Type:</label>
+          <select id="type" name="type" class="form-control">
+            <option value="Repertory">Repertory</option>
+            <option value="Method">Method</option>
+            <option value="Technique">Technique</option>
+          </select>
+        </div>
+        <div class="form-group col-sm">
+          <label for="note">Notes:</label>
+          <textarea rows="4" class="form-control" name="note" id="note"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+  <script src="{% static 'journalpath/js/catalog_form.js' %}"></script>
+  <script>
+    $('#name').val('{{ catalog_id.name }}');
+    $('#author').val('{{ catalog_id.author.id }}');
+    $('#date').val('{{ catalog_id.date|date:"Y-m-d" }}');
+    $('#difficulty').val('{{ catalog_id.difficulty }}');
+    $('#self_appraisal').val('{{ catalog_id.self_appraisal }}');
+    $('#type').val('{{ catalog_id.type }}');
+    $('#note').val('{{ catalog_id.note }}');
+    {% if catalog_id == False %}
+      let date = new Date();
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+      if (month < 10)
+        month = "0" + month;
+      if (day < 10)
+        day = "0" + day;
+      let today = year + "-" + month + "-" + day;
+      $("#date").val(today);
+    {% endif %}
+  </script>
+
+
+{% endblock %}

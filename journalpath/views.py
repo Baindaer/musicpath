@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
+
+from datetime import datetime
+
 from django.shortcuts import render
 from django.contrib import auth, messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from .models import *
 
 
 def index(request):
@@ -93,3 +98,142 @@ def session_list(request):
     }
     return render(request, 'journalpath/session_list.html', context)
 
+
+def catalog_form(request, catalog_id):
+
+    if not request.user.is_authenticated:
+        messages.error(request, 'You need to login')
+        return HttpResponseRedirect(reverse('login'))
+    authors = Author.objects.all().order_by('name')
+    try:
+        catalog_id = Catalog.objects.get(id=catalog_id)
+    except models.ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse('catalog_list'))
+
+    if request.method == 'POST':
+        if request.POST['submit'] == 'delete_item':
+            catalog_id.delete()
+
+            return HttpResponseRedirect(reverse('catalog_list'))
+        if request.POST['submit'] == 'cancel':
+            return HttpResponseRedirect(reverse('catalog_list'))
+
+        if request.POST['submit'] == 'save_item':
+            catalog_id.name = request.POST['name']
+            catalog_id.date = datetime.strptime(request.POST['date'], "%Y-%m-%d")
+            catalog_id.author = Author.objects.get(id=request.POST['author'])
+            catalog_id.type = request.POST['type']
+            catalog_id.difficulty = request.POST['difficulty']
+            catalog_id.self_appraisal = request.POST['self_appraisal']
+            catalog_id.note = request.POST['note']
+            catalog_id.save()
+
+    context = {
+        'active': 'catalog',
+        'catalog_id': catalog_id,
+        'authors': authors,
+    }
+
+    return render(request, 'journalpath/catalog_form.html', context)
+
+
+def catalog_new(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'You need to login')
+        return HttpResponseRedirect(reverse('lolpath:login'))
+    authors = Author.objects.all().order_by('name')
+
+    context = {
+        'active': 'catalog',
+        'catalog_id': False,
+        'authors': authors,
+    }
+    if request.method == 'POST':
+        if request.POST['submit'] == 'submit_item' or request.POST['submit'] == 'submit_new':
+            # Agregando reg
+            author_req = request.POST['author']
+            author = Author.objects.get(id=author_req)
+
+            new_piece = Catalog(
+                name=request.POST['name'],
+                author=author,
+                type=request.POST['type'],
+                date=datetime.strptime(request.POST['date'], "%Y-%m-%d"),
+                difficulty=request.POST['difficulty'],
+                self_appraisal=request.POST['self_appraisal'],
+                note=request.POST['note'],
+                user=request.user,
+            )
+            new_piece.save()
+            messages.success(request, 'Piece registered successfully')
+            return HttpResponseRedirect(reverse('catalog_list'))
+
+        if request.POST['submit'] == 'cancel':
+            return HttpResponseRedirect(reverse('catalog_list'))
+    return render(request, 'journalpath/catalog_form.html', context)
+
+
+def session_new(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'You need to login')
+        return HttpResponseRedirect(reverse('lolpath:login'))
+    catalogs = Catalog.objects.all().order_by('name')
+
+    context = {
+        'active': 'sessions',
+        'session_id': False,
+        'catalogs': catalogs,
+    }
+    if request.method == 'POST':
+        if request.POST['submit'] == 'submit_item':
+            # Agregando reg
+            catalog_req = request.POST['catalog']
+            catalog = Catalog.objects.get(id=catalog_req)
+            catalog_type = catalog.type
+
+            new_piece = Session(
+                catalog=catalog,
+                date=datetime.strptime(request.POST['date'], "%Y-%m-%d"),
+                type=catalog_type,
+                rate=request.POST['rate'],
+                tempo_min=request.POST['tempo_min'] or 0,
+                tempo_max=request.POST['tempo_max'] or 0,
+                emoji=request.POST['emoji'],
+                detail=request.POST['detail'],
+                unit=request.POST['unit'],
+                duration=request.POST['duration'],
+                user=request.user,
+            )
+            new_piece.save()
+            messages.success(request, 'Session registered successfully')
+            return HttpResponseRedirect(reverse('session_list'))
+
+        if request.POST['submit'] == 'cancel':
+            return HttpResponseRedirect(reverse('session_form'))
+    return render(request, 'journalpath/session_form.html', context)
+
+
+def session_form(request, session_id):
+
+    if not request.user.is_authenticated:
+        messages.error(request, 'You need to login')
+        return HttpResponseRedirect(reverse('login'))
+    try:
+        session_id = Session.objects.get(id=session_id)
+    except models.ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse('catalog_list'))
+    catalogs = Catalog.objects.all().order_by('name')
+    if request.method == 'POST':
+        if request.POST['submit'] == 'delete_item':
+            session_id.delete()
+            return HttpResponseRedirect(reverse('session_list'))
+        if request.POST['submit'] == 'cancel':
+            return HttpResponseRedirect(reverse('session_list'))
+
+    context = {
+        'active': 'sessions',
+        'session_id': session_id,
+        'catalogs': catalogs,
+    }
+
+    return render(request, 'journalpath/session_form.html', context)

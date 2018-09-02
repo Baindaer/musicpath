@@ -17,7 +17,7 @@
     </ol>
     <div class="row">
       <div class="col-6">
-        <a class="btn btn-primary" href="#">New</a>
+        <a class="btn btn-primary" href="/catalog_new">New</a>
       </div>
 
     </div>
@@ -36,9 +36,9 @@
             <th data-field="id">ID</th>
             <th data-field="name" data-sortable="1">Name</th>
             <th data-field="author" data-sortable="1">Author</th>
-            <th data-field="date" data-sortable="1">Date Added</th>
             <th data-field="type" data-sortable="1">Type</th>
             <th data-field="difficulty" data-sortable="1">Difficulty</th>
+            <th data-field="date" data-sortable="1">Date Added</th>
             <th data-field="self_appraisal" data-sortable="1">Self Appraisal</th>
           </tr>
         </thead>
@@ -48,7 +48,6 @@
             <td>{{ c.id }}</td>
             <td>{{ c.name }}</td>
             <td>{{ c.author }}</td>
-            <td>{{ c.date }}</td>
             <td>
               {% if c.type == 'Repertory' %}
                 <i class="fa fa-music" aria-hidden="true"></i>
@@ -62,10 +61,11 @@
               {% if c.difficulty == 0 %}
                 <i class="fa fa-book" aria-hidden="true"></i>
               {% else %}
-                  <kbd id="kbd_difficulty" data-difficulty={{ c.difficulty }}>{{ c.difficulty }}</kbd>
+                  <kbd class="kbd_difficulty" data-difficulty={{ c.difficulty }}>{{ c.difficulty }}</kbd>
 
               {% endif %}
             </td>
+            <td>{{ c.date }}</td>
             <td>
                 <span class="stars" data-rating={{ c.self_appraisal }} data-num-stars="5"></span>
             </td>
@@ -74,7 +74,7 @@
         </tbody>
       </table>
     </div>
-
+    <br/><br/>
 
     {% if catalog_data.has_other_pages %}
       <ul class="pagination">
