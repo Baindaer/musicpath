@@ -7,8 +7,18 @@ from django.contrib import auth, messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import connection
 
 from .models import *
+
+
+def dictfetchall(cursor):
+    """Return all rows from a cursor as a dict"""
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
 
 
 def index(request):
@@ -128,10 +138,24 @@ def catalog_form(request, catalog_id):
             catalog_id.note = request.POST['note']
             catalog_id.save()
 
+    # Statics
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT sum(duration), count(id) from journalpath_session "
+                       "WHERE catalog_id={catalog} ".format(catalog=catalog_id.id))
+        practiced = cursor.fetchall()
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT sum(duration), count(id) from journalpath_session "
+                       "WHERE catalog_id={catalog} "
+                       "AND date > '2018-08-12'".format(catalog=catalog_id.id))
+        practiced_lw = cursor.fetchall()
     context = {
         'active': 'catalog',
         'catalog_id': catalog_id,
         'authors': authors,
+        'practiced_time': practiced[0][0],
+        'practiced_times': practiced[0][1],
+        'practiced_time_lw': practiced_lw[0][0],
+        'practiced_times_lw': practiced_lw[0][1],
     }
 
     return render(request, 'journalpath/catalog_form.html', context)
@@ -195,13 +219,13 @@ def session_new(request):
                 catalog=catalog,
                 date=datetime.strptime(request.POST['date'], "%Y-%m-%d"),
                 type=catalog_type,
-                rate=request.POST['rate'],
+                rate=request.POST['rate'] or 0,
                 tempo_min=request.POST['tempo_min'] or 0,
                 tempo_max=request.POST['tempo_max'] or 0,
                 emoji=request.POST['emoji'],
                 detail=request.POST['detail'],
                 unit=request.POST['unit'],
-                duration=request.POST['duration'],
+                duration=request.POST['duration'] or 0,
                 user=request.user,
             )
             new_piece.save()

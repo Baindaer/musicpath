@@ -88,7 +88,49 @@
     </div>
 
   </form>
+  <div class="card-deck">
+  <div class="card text-white bg-dark">
 
+    <div class="card-body">
+      <h5 class="card-title">Last week practiced time</h5>
+      <p class="card-text">
+        <i class="fa fa-clock-o fa-3x" aria-hidden="true"></i>
+        <span style="font-size: 48px">
+          {% if practiced_time_lw == None %}
+             0 min
+          {% else %}
+            {{ practiced_time_lw }} min
+          {% endif %}
+
+        </span></p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Practiced {{ practiced_times_lw }} times</small>
+    </div>
+  </div>
+
+  <div class="card text-white bg-dark">
+
+    <div class="card-body">
+      <h5 class="card-title">Total practiced time</h5>
+      <p class="card-text">
+        <i class="fa fa-clock-o fa-3x" aria-hidden="true"></i>
+        <span style="font-size: 48px">
+          {% if practiced_time == None %}
+            Never 😣
+          {% else %}
+            {{ practiced_time }} min
+          {% endif %}
+
+        </span></p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Practiced {{ practiced_times }} times</small>
+    </div>
+  </div>
+
+
+</div>
 {% endblock %}
 
 

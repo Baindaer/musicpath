@@ -113,7 +113,7 @@
   $('#duration').val('{{ session_id.duration }}');
   $('#tempo_min').val('{{ session_id.tempo_min }}');
   $('#tempo_max').val('{{ session_id.tempo_max }}');
-  $('#unity').val('{{ session_id.unity }}');
+  $('#unit').val('{{ session_id.unit }}');
   $('#detail').val('{{ session_id.detail }}');
 
   {% if session_id == False %}
@@ -128,6 +128,6 @@
       let today = year + "-" + month + "-" + day;
       console.log("sds");
       $("#date").val(today);
-    {% endif %}
+  {% endif %}
   </script>
 {% endblock %}
