@@ -33,7 +33,7 @@ $.fn.difficulty_tag = function() {
         } else if (diff <= 6) {
             $(this).attr("style", "background-color: #b58900;");
         } else if (diff <= 8) {
-            $(this).attr("style", "background-color: #eee8d5;");
+            $(this).attr("style", "background-color: #6c71c4;");
         } else if (diff <= 10) {
             $(this).attr("style", "background-color: #268bd2;");
         } else {

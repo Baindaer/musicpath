@@ -39,8 +39,7 @@
             <th data-field="catalog">Work</th>
             <th data-field="type">Type</th>
             <th data-field="duration" data-sortable="1">Duration</th>
-            <th data-field="tempo_min">Tempo Min</th>
-            <th data-field="tempo_max">Tempo Max</th>
+            <th data-field="tempo">Tempo</th>
             <th data-field="unit">Unit</th>
             <th data-field="rate" data-sortable="1">Rate</th>
             <th data-field="emoji" data-sortable="1">Emoji</th>
@@ -62,8 +61,7 @@
               {% endif %}
             </td>
             <td> <i class="fa fa-clock-o" aria-hidden="true"></i> {{ c.duration }}</td>
-          <td>{{ c.tempo_min }}</td>
-          <td>{{ c.tempo_max }}</td>
+          <td>{{ c.tempo }}</td>
           <td>{{ c.unit }}</td>
             <td>
                 <span class="stars" data-rating={{ c.rate }} data-num-stars="5"></span>

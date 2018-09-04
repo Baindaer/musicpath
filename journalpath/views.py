@@ -61,7 +61,7 @@ def catalog_list(request):
         messages.error(request, 'You need to login')
         return HttpResponseRedirect(reverse('login'))
     try:
-        user_catalog = Catalog.objects.filter(user_id=request.user).order_by('-id')
+        user_catalog = Catalog.objects.filter(user_id=request.user).order_by('-date')
     except models.ObjectDoesNotExist:
         user_catalog = False
 
@@ -220,8 +220,7 @@ def session_new(request):
                 date=datetime.strptime(request.POST['date'], "%Y-%m-%d"),
                 type=catalog_type,
                 rate=request.POST['rate'] or 0,
-                tempo_min=request.POST['tempo_min'] or 0,
-                tempo_max=request.POST['tempo_max'] or 0,
+                tempo=request.POST['tempo'] or 0,
                 emoji=request.POST['emoji'],
                 detail=request.POST['detail'],
                 unit=request.POST['unit'],
@@ -233,7 +232,7 @@ def session_new(request):
             return HttpResponseRedirect(reverse('session_list'))
 
         if request.POST['submit'] == 'cancel':
-            return HttpResponseRedirect(reverse('session_form'))
+            return HttpResponseRedirect(reverse('session_list'))
     return render(request, 'journalpath/session_form.html', context)
 
 

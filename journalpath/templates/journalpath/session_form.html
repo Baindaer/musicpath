@@ -59,22 +59,8 @@
         </div>
 
         <div class="w-100"></div>
-        <div class="form-group col-sm">
-          <label for="tempo_min">Tempo Min:</label>
-          <input type="number" class="form-control" name="tempo_min" id="tempo_min">
-        </div>
-        <div class="form-group col-sm">
-          <label for="tempo_max">Tempo Max:</label>
-          <input type="number" class="form-control" name="tempo_max" id="tempo_max">
-        </div>
-        <div class="form-group col-sm">
-          <label for="unit">Unit:</label>
-          <input type="text" class="form-control" name="unit" id="unit">
-        </div>
 
-        <div class="w-100"></div>
-
-        <div class="form-group col-sm">
+      <div class="form-group col-sm">
           <label for="duration">Duration:</label>
           <input type="number" class="form-control" name="duration" id="duration">
         </div>
@@ -87,11 +73,18 @@
           <input type="text" data-emojiable="true" class="form-control" name="emoji" id="emoji">
         </div>
 
-
         <div class="w-100"></div>
 
+         <div class="form-group col-sm">
+          <label for="tempo">Tempo:</label>
+          <input type="text" class="form-control" name="tempo" id="tempo">
+        </div>
+        <div class="form-group col-sm">
+          <label for="unit">Unit:</label>
+          <input type="text" class="form-control" name="unit" id="unit">
+        </div>
 
-
+        <div class="w-100"></div>
 
         <div class="form-group col-sm">
           <label for="detail">Detail:</label>
@@ -111,8 +104,7 @@
   $('#rate').val('{{ session_id.rate }}');
   $('#emoji').val('{{ session_id.emoji }}');
   $('#duration').val('{{ session_id.duration }}');
-  $('#tempo_min').val('{{ session_id.tempo_min }}');
-  $('#tempo_max').val('{{ session_id.tempo_max }}');
+  $('#tempo').val('{{ session_id.tempo }}');
   $('#unit').val('{{ session_id.unit }}');
   $('#detail').val('{{ session_id.detail }}');
 

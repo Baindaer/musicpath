@@ -37,8 +37,7 @@ class Session(models.Model):
     type = models.CharField('Type', max_length=64)
     catalog = models.ForeignKey('Catalog', on_delete="models.PROTECT")
     detail = models.TextField('Detail', max_length=256, null=True, blank=True)
-    tempo_min = models.IntegerField('Tempo Min', null=True, blank=True)
-    tempo_max = models.IntegerField('Tempo Max', null=True, blank=True)
+    tempo = models.CharField('Tempo Min', max_length=32, null=True, blank=True)
     unit = models.CharField('Unit', max_length=32, null=True, blank=True)
 
     def __str__(self):
